@@ -1,7 +1,7 @@
 import React from "react";
 import { Todo } from "@prisma/client";
 import { Link, LoaderFunction, Outlet, useLoaderData } from "remix";
-import { todoService } from "~/db";
+import { todoService } from "~/db/services.server";
 
 export const loader: LoaderFunction = ({ params }) => {
   return todoService.getUserTodos(Number(params.userId));

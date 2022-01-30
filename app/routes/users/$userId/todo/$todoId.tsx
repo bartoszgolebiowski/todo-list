@@ -8,7 +8,7 @@ import {
   useActionData,
   useLoaderData,
 } from "remix";
-import { todoService } from "~/db";
+import { todoService } from "~/db/services.server";
 
 export const loader: LoaderFunction = ({ params }) => {
   const todoId = Number(params.todoId);
@@ -43,30 +43,33 @@ const Todo = () => {
   const todos = useLoaderData<Todo>();
 
   return (
-    <div>
-      <Form method="post">
-        <p>
-          <label>
-            Title: {errors?.title && <em>Title is required</em>}
-            <input type="text" defaultValue={todos.title} name="title" />
-          </label>
-        </p>
-        <p>
-          <label>
-            Description:{" "}
-            {errors?.description && <em>Description is required</em>}
-            <input
-              type="text"
-              defaultValue={todos.description}
-              name="description"
-            />
-          </label>
-        </p>
-        <p>
-          <button type="submit">Submit</button>
-        </p>
-      </Form>
-    </div>
+    <>
+      <div>
+        <Form method="post">
+          <p>
+            <label>
+              Title: {errors?.title && <em>Title is required</em>}
+              <input type="text" defaultValue={todos.title} name="title" />
+            </label>
+          </p>
+          <p>
+            <label>
+              Description:{" "}
+              {errors?.description && <em>Description is required</em>}
+              <input
+                type="text"
+                defaultValue={todos.description}
+                name="description"
+              />
+            </label>
+          </p>
+          <p>
+            <button type="submit">Submit</button>
+          </p>
+        </Form>
+      </div>
+      <style>{`em { color:red }`}</style>
+    </>
   );
 };
 
