@@ -6,6 +6,9 @@ class TodoService implements ITodoService {
   constructor(client: PrismaClient) {
     this.client = client;
   }
+  getTodo(id: number): Promise<Todo | null> {
+    return this.client.todo.findFirst({ where: { id } });
+  }
   getAllTodos(): Promise<Todo[]> {
     return this.client.todo.findMany();
   }

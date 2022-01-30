@@ -6,6 +6,9 @@ class UserService implements IUserService {
   constructor(client: PrismaClient) {
     this.client = client;
   }
+  getAllUsers(): Promise<User[]> {
+    return this.client.user.findMany();
+  }
   getUser(id: number): Promise<User | null> {
     return this.client.user.findFirst({ where: { id } });
   }
