@@ -1,0 +1,8 @@
+node_modules/
+
+# Ignore artifacts:
+.cache
+build/
+coverage/
+
+eslintrc.json
