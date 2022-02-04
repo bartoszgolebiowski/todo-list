@@ -1,37 +1,19 @@
-import React from "react";
-import { Todo } from "@prisma/client";
 import {
   ActionFunction,
   Form,
   json,
-  LoaderFunction,
   redirect,
   ThrownResponse,
   useActionData,
   useCatch,
-  useLoaderData,
 } from "remix";
 import { todoRepository } from "~/db/repositories.server";
-import { authenticator } from "~/services/auth.server";
 
 type ThrownResponses = ThrownResponse<403>;
 type FormErrors = { title?: true; description?: true };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
-  const todoId = Number(params.todoId);
-  const userId = Number(params.userId);
-  const loggedUser = await authenticator.isAuthenticated(request, {
-    failureRedirect: "/",
-  });
-  const todo = await todoRepository.getTodo(todoId);
-  if (todo && todo.userId !== loggedUser.id && todo.userId !== userId) {
-    throw json(null, { status: 403 });
-  }
-  return todo;
-};
-
 export const action: ActionFunction = async ({ request, params }) => {
-  const todoId = Number(params.todoId);
+  const userId = Number(params.userId);
   const formData = await request.formData();
 
   const title = formData.get("title") as string;
@@ -45,9 +27,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     return errors;
   }
 
-  const todo = await todoRepository.editTodo(todoId, {
+  const todo = await todoRepository.createTodo({
     description,
     title,
+    userId,
   });
 
   return redirect(`users/${todo.userId}/todo`);
@@ -55,31 +38,22 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default () => {
   const errors = useActionData<FormErrors>();
-  const todo = useLoaderData<Todo | null>();
-
-  if (!todo) {
-    return <h2>Todo does not exist.</h2>;
-  }
 
   return (
     <>
       <div>
-        <Form method="post" key={todo.id}>
+        <Form method="post">
           <p>
             <label>
               Title: {errors?.title && <em>Title is required</em>}
-              <input type="text" defaultValue={todo?.title} name="title" />
+              <input type="text" name="title" />
             </label>
           </p>
           <p>
             <label>
               Description:
               {errors?.description && <em>Description is required</em>}
-              <input
-                type="text"
-                defaultValue={todo.description}
-                name="description"
-              />
+              <input type="text" name="description" />
             </label>
           </p>
           <p>
@@ -99,10 +73,14 @@ export const CatchBoundary = () => {
     case 403:
       return (
         <div>
-          <p>You cannot edit someone else todo</p>
+          <p>You cannot create todo: CatchBoundary</p>
         </div>
       );
     default:
       return <div>Something went wrong</div>;
   }
+};
+
+export const ErrorBoundary = () => {
+  return <div>Something went wrong: ErrorBoundary</div>;
 };

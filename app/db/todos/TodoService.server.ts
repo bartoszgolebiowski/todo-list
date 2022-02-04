@@ -1,7 +1,7 @@
 import { Prisma, PrismaClient, Todo } from "@prisma/client";
-import ITodoService from "./ITodoService";
+import ITodoRepository from "./ITodoRepository";
 
-class TodoService implements ITodoService {
+class TodoRepository implements ITodoRepository {
   client: PrismaClient;
   constructor(client: PrismaClient) {
     this.client = client;
@@ -23,4 +23,4 @@ class TodoService implements ITodoService {
   }
 }
 
-export default TodoService;
+export default TodoRepository;

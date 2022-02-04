@@ -1,6 +1,6 @@
 import { Todo, Prisma } from "@prisma/client";
 
-interface ITodoService {
+interface ITodoRepository {
   getTodo(id: number): Promise<Todo | null>;
   getAllTodos(): Promise<Todo[]>;
   getUserTodos(userId: number): Promise<Todo[]>;
@@ -8,4 +8,4 @@ interface ITodoService {
   editTodo(id: number, todo: Prisma.TodoUpdateArgs["data"]): Promise<Todo>;
 }
 
-export default ITodoService;
+export default ITodoRepository;
