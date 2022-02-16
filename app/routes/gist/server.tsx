@@ -32,7 +32,7 @@ export default () => {
           </a>
           <ul>
             {gist.files.map((key) => (
-              <li>{key}</li>
+              <li key={key}>{key}</li>
             ))}
           </ul>
         </li>

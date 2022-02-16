@@ -6,6 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
+    "prod": "remix-serve ./build",
     "postinstall": "remix setup node",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && git update-index --again",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --quiet"
